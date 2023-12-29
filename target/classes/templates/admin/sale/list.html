@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sale dashboard</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #f1f1f1;
+        }
+
+        .navbar-brand, .navbar-nav .nav-link, .navbar-text {
+            color: #ffffff;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .user-table {
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar a.active {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar bg-success">
+    <a href="/admin/products/adminDashboard" class="font-weight-bolder my-2 text-dark">Dashboard</a>
+    <a href="/user/list" class=" font-weight-bolder my-5 text-dark">Manage Users</a>
+    <a href="/admin/products/list" class="font-weight-bolder my-5 text-dark">Manage Products</a>
+    <a href="/admin/sales/list" class=" active font-weight-bolder my-5 text-dark">View Sales</a>
+    <a href="/logout" class="font-weight-bolder my-5 text-dark">Logout</a>
+</div>
+
+
+<div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="navbar-text pr-3" id="loggedUser">Logged User</span>
+                    <a class="nav-link" href="/logout" id="logoutLink" style="display: none;">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container py-5">
+
+        <div th:if="${message}" class="alert alert-danger">
+            [[${message}]]
+        </div>
+
+        <div class="d-inline-flex">
+            <div class="">
+<!--                <a class="btn btn-primary" href="/admin/purchase/add">Add New</a>-->
+            </div>
+            <div class="mx-5"><h2 class="h2 text-center">Sale Management</h2></div>
+        </div>
+
+
+
+
+        <table class="table user-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Quantity</th>
+                <th>Amount/th>
+                <th>Date</th>
+                <th>Product</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>MOMO</th>
+                <th class="mx-5">Credit Card</th>
+                <th class="mx-5">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sale : ${sales}">
+                <td th:text="${sale.id}"></td>
+                <td th:text="${sale.firstname}"></td>
+                <td th:text="${sale.lastname}"></td>
+                <td th:text="${sale.quantity}"></td>
+                <td th:text="${sale.amount}"></td>
+                <td th:text="${#dates.format(sale.saleDate, 'yyyy-MM-dd')}"></td>
+                <td th:text="${sale.product?.name}">Product Name</td>
+                <td th:text="${sale.amount}"></td>
+                <td th:text="${sale.paymentMethod}"></td>
+                <td class="mx-5" th:text="${sale.mobileMoneyPhoneNumber}"></td>
+                <td class="mx-5" th:text="${sale.creditCardNumber}"></td>
+                <td class="mx-5">
+                    <a class="text-success" th:href="@{'/admin/sales/edit/' + ${sale.id}}">Edit</a>
+                    <a class="text-danger" th:href="@{'/admin/sales/delete/' + ${sale.id}}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+
+
+
+    </div>
+</div>
+
+<!-- Link to Bootstrap JS and Popper.js -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+<!-- Custom Script -->
+<script>
+
+    var loggedUser = "Admin";
+
+
+    document.getElementById("loggedUser").innerText = "Logged in as " + loggedUser;
+
+
+    document.getElementById("loggedUser").addEventListener("click", function () {
+        document.getElementById("logoutLink").style.display = "block";
+    });
+
+
+
+
+
+</script>
+</body>
+</html>

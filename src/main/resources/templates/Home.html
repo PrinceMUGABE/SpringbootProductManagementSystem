@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Medical System - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha384-ez0pTnJV8LlL3tTQzJkI5I9CQ8j5tzpJrhVMEaQxO1qUqq/hFQOBU6nZpXGi7r/n" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .medical-form {
+            background-color: #ffffff;
+            padding: 20px;
+            margin: 50px auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px #000000;
+        }
+
+        h1 {
+            color: blue;
+        }
+
+        @media (max-width: 768px) {
+            /* Apply styles for screens smaller than 768px width */
+            .card-body .text-center img {
+                width: 150px;
+                height: 80px;
+            }
+        }
+    </style>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <a class="navbar-brand font-weight-bolder" href="#">Product System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="/">Home</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="#">Contact</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="#" style=":hover">About Us</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link font-weight-bold" href="/login">Login</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<section class="bg-success" style="margin-bottom: 100px;">
+    <div class="container-fluid text-center">
+        <h1 class="display-4 text-white">Welcome to Product E-commerce</h1>
+        <p class="text-white py-5">Your satisfaction is our priority.</p>
+    </div>
+</section>
+
+
+
+<div th:if="${message}" class="alert alert-danger">
+    [[${message}]]
+</div>
+
+<div class="container feature py-5" style="background-color: saddlebrown;">
+    <div th:if="${pagedProducts != null}">
+        <div class="card-deck">
+            <div th:each="product : ${pagedProducts.content}" class="card mb-3" >
+                <div class="card-body bg-success" >
+                    <div class="text-center">
+                        <!-- Add an img tag to display the product image -->
+                        <img th:src="@{/admin/products/image/{productId}(productId=${product.id})}" class="img-fluid" alt="Product Image" style="width: 100px; height: 100px;"/>
+                    </div>
+                    <div class="mt-3">
+                        <label>Name:</label>
+                        <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+                    </div>
+                    <div>
+                        <label>Description:</label>
+                        <p class="card-text" th:text="${product.description}">Product Description</p>
+                    </div>
+                    <div>
+                        <label>Price:</label>
+                        <p class="card-text" th:text="'Price: ' + ${product.price}">Price: </p>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <a class="btn btn-dark" th:href="@{/admin/purchase/add(productId=${product.id})}">Purchase Product</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+<footer class="bg-success py-5" style="margin-top: 100px;">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <i class="fab fa-facebook fa-2x mx-3"></i>
+                <i class="fab fa-twitter fa-2x mx-3"></i>
+                <i class="fab fa-instagram fa-2x mx-3"></i>
+                <!-- Add more social media icons as needed -->
+
+                <p class="mt-3">Follow us on social media for updates</p>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

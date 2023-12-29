@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Sale</title>
+</head>
+<body>
+
+<h2>Add Sale</h2>
+
+<form method="post" th:object="${sale}" th:action="@{/admin/sales/add}">
+    <!-- Add form fields based on your Sale entity -->
+    <label>Date: <input type="date" th:field="*{saleDate}"></label><br>
+    <label>Username: <input type="text" th:field="*{user.username}"></label><br>
+    <label>Amount: <input type="text" th:field="*{amount}"></label><br>
+
+    <button type="submit">Add Sale</button>
+</form>
+
+</body>
+</html>

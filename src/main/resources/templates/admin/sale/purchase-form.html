@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase Form</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <!-- Add the jQuery library -->
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+</head>
+<body>
+
+<div class="container-fluid my-5">
+    <div class="container">
+        <div class="bg-secondary text-center text-primary">
+            <h2>Fill the form</h2>
+        </div>
+<!--        <div class="bg-secondary text-center text-primary">-->
+<!--            <h2>Fill the form for Product ID: <span th:text="${productId}"></span></h2>-->
+<!--        </div>-->
+        <div class="form-group text-center my-5 bg-white">
+            <form id="orderForm" th:action="@{/admin/purchase/save/new}" th:object="${sale}" method="post">
+                <input type="hidden" name="purchaseProductId" th:value="${productId}" />
+
+
+
+
+                <!-- Product details -->
+                <div class="card-body">
+                    <div class="d-inline-flex">
+                        <div><label>Name: </label></div>
+                        <div class="mx-5">
+                            <label class="px-5 py-2 bg-white" th:text="${product.name}"></label>
+                        </div>
+                    </div><br>
+
+                    <div class="d-inline-flex">
+                        <div><label>Description: </label></div>
+                        <div class="mx-5">
+                            <label class="px-lg-5 py-2 bg-white" th:text="${product.description}"></label>
+                        </div>
+                    </div><br>
+
+                    <div class="d-inline-flex">
+                        <div><label>Price: </label></div>
+                        <div class="mx-5">
+                            <label class="bg-white px-5 py-2" th:text="${product.price}" id="itemPrice"></label>
+                        </div>
+                    </div><br>
+                </div>
+
+                <!-- Sale form fields -->
+                <div class="form-body">
+                    <div class="d-inline-flex mx-5">
+                        <div><label for="firstname">First Name:</label></div>
+                        <div class="mx-5">
+                            <input type="text" class="form-control px-5" id="firstname" th:field="*{firstname}" required>
+                        </div>
+                    </div><br>
+
+                    <div class="d-inline-flex mx-5">
+                        <div><label for="lastname">Last Name:</label></div>
+                        <div class="my-2 mx-5">
+                            <input type="text" class="form-control px-5" id="lastname" th:field="*{lastname}" required>
+                        </div>
+                    </div><br>
+
+                    <!-- Payment Method dropdown -->
+                    <div class="d-inline-flex mx-5">
+                        <div><label for="paymentMethod">Payment Method:</label></div>
+                        <div class="my-2 mx-5">
+                            <select class="form-control px-5" id="paymentMethod" th:field="*{paymentMethod}" required>
+                                <option value="">Select</option>
+                                <option value="MobileMoney">Mobile Money</option>
+                                <option value="CreditCard">Credit Card</option>
+                            </select>
+                        </div>
+                    </div><br>
+
+
+                    <!-- Mobile Money Phone Number input -->
+                    <div id="mobileMoneyForm" style="display: none;">
+                        <div class="d-inline-flex mx-5">
+                            <div><label for="mobileMoneyPhoneNumber">Mobile Money Phone Number:</label></div>
+                            <div class="my-2 mx-5">
+                                <input type="text" class="form-control px-5" id="mobileMoneyPhoneNumber" name="mobileMoneyPhoneNumber" th:field="*{mobileMoneyPhoneNumber}" />
+                            </div>
+                        </div><br>
+                    </div>
+
+                    <!-- Credit Card Number input -->
+                    <div id="creditCardForm" style="display: none;">
+                        <div class="d-inline-flex mx-5">
+                            <div><label for="creditCardNumber">Credit Card Number:</label></div>
+                            <div class="my-2 mx-5">
+                                <input type="text" class="form-control px-5" id="creditCardNumber" name="creditCardNumber" th:field="*{creditCardNumber}" />
+                            </div>
+                        </div><br>
+                    </div>
+
+
+                    <!-- Script to handle payment method selection -->
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        document.getElementById('paymentMethod').addEventListener('change', function () {
+                            var mobileMoneyForm = document.getElementById('mobileMoneyForm');
+                            var creditCardForm = document.getElementById('creditCardForm');
+
+                            // Hide all forms
+                            mobileMoneyForm.style.display = 'none';
+                            creditCardForm.style.display = 'none';
+
+                            // Show the selected form based on payment method
+                            if (this.value === 'MobileMoney') {
+                                mobileMoneyForm.style.display = 'block';
+                            } else if (this.value === 'CreditCard') {
+                                creditCardForm.style.display = 'block';
+                            }
+                        });
+                        /*]]>*/
+                    </script>
+
+                    <!-- Quantity and Total Amount calculation -->
+                    <div class="d-inline-flex mx-5">
+                        <div><label for="quantity">Quantity:</label></div>
+                        <div class="my-2 mx-5">
+                            <label for="quantity">Quantity:</label>
+                            <input type="text" id="quantity" name="quantity" th:field="*{quantity}" required />
+
+                        </div>
+                    </div><br>
+
+                    <button type="button" onclick="calculateTotal()" class="btn btn-primary">Calculate Total</button>
+
+                    <p id="totalAmount">Total Amount: $0.00</p>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit Purchase</button>
+                <a class="btn btn-danger" href="/logout">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Script to calculate total amount -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function calculateTotal() {
+        // Get item price and quantity
+        var itemPrice = parseFloat([[${product.price}]]);
+        var quantity = parseInt(document.getElementById('quantity').value);
+
+        // Check if itemPrice and quantity are valid numbers
+        if (isNaN(itemPrice) || isNaN(quantity) || quantity < 1) {
+            console.error('Invalid item price or quantity');
+            return;
+        }
+
+        // Calculate total amount
+        var totalAmount = itemPrice * quantity;
+
+        // Display total amount
+        document.getElementById('totalAmount').textContent = 'Total Amount: $' + totalAmount.toFixed(2);
+    }
+    /*]]>*/
+</script>
+
+</body>
+</html>

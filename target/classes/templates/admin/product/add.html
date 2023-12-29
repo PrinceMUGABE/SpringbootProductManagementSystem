@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container-fluid text-center">
+    <div class="container py-5 my-5 border-0">
+        <div>
+            <div class="bg-secondary py-3 mx-5">
+                <h2 class="text-dark text-center">Add Product</h2>
+                <div class="bg-white mx-5 py-5">
+                    <form method="post" th:object="${product}" th:action="@{/admin/products/add/new}" enctype="multipart/form-data">
+                        <div class="form-body">
+                            <label>Name:<input type="text" class="form-control" th:field="*{name}" maxlength="50" required></label>
+                        </div>
+                        <div class="form-body">
+                            <label>Price:<input type="text" class="form-control" th:field="*{price}" required></label>
+                        </div>
+                        <div class="form-body">
+                            <label>Description:<input type="text" class="form-control" th:field="*{description}" maxlength="50" required></label>
+                        </div>
+                        <div class="form-body">
+                            <label>Image:<input type="file" name="imageFile" accept="image/png, image/jpeg"></label>
+
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save New</button>
+                        <a class="btn btn-danger" href="/admin/products/list">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

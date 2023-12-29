@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Sale</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+
+<div th:if="${message}" class="alert alert-danger">
+    [[${message}]]
+</div>
+
+<div class="container-fluid text-center">
+
+    <div class="container py-5 my-5 border-0">
+        <div>
+            <div class="bg-success py-5 mx-5">
+
+
+                <div class="bg-white mx-5 py-5">
+                    <div class="text-center"><h2 class="text-dark text-center">Edit Sale</h2></div>
+                    <form method="post" th:object="${sale}" th:action="@{/admin/sales/save/edit}">
+                        <input type="hidden" th:field="*{id}">
+
+                        <div class="form-body">
+                            <label>Firstname: <input type="text" th:field="*{firstname}" /></label>
+                        </div>
+                        <div class="form-body">
+                            <label>Lastname: <input type="text" th:field="*{lastname}" /></label>
+
+                        </div>
+
+                        <div class="form-body">
+                            <label>Quantity: <input type="text" th:field="*{quantity}" /></label>
+
+                        </div>
+                        <div class="form-body">
+                            <label>Amount: <input type="text" th:field="*{amount}" /></label>
+
+                        </div>
+                        <div class="form-body">
+                            <label>Payment Method: <input type="text" th:field="*{paymentMethod}" /></label>
+
+                        </div>
+
+                        <div class="form-body">
+                            <label>Product:
+                                <select th:field="*{productId}">
+                                    <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+                                </select>
+                            </label>
+
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Changes</button>
+                        <a class="btn btn-danger" href="/admin/sales/list" >Cancel</a>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
+
